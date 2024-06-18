@@ -1,10 +1,9 @@
 package ar.edu.utn.frc.tup.lc.iii.controllers;
 
 
-import ar.edu.utn.frc.tup.lc.iii.dtos.MatchDto;
-import ar.edu.utn.frc.tup.lc.iii.dtos.UserDto;
-import ar.edu.utn.frc.tup.lc.iii.models.MatchDificulty;
+import ar.edu.utn.frc.tup.lc.iii.dtos.*;
 import ar.edu.utn.frc.tup.lc.iii.models.MatchModel;
+import ar.edu.utn.frc.tup.lc.iii.models.RoundMatch;
 import ar.edu.utn.frc.tup.lc.iii.models.UserModel;
 import ar.edu.utn.frc.tup.lc.iii.services.UserService;
 import org.modelmapper.ModelMapper;
@@ -42,23 +41,26 @@ public class UserController {
     }
 
 
-    @PostMapping("/{userId}/matches/{dificulty}")
-    public ResponseEntity<MatchDto> createUserMatch(@PathVariable Long userId,@PathVariable MatchDificulty dificulty) {
+    @PostMapping("/{userId}/matches")
+    public ResponseEntity<MatchDto> createUserMatch(@PathVariable Long userId,@RequestBody CreateUserMatchDto createUserMatchDto) {
 
-        MatchModel match = userService.createUserMatch(userId,dificulty);
+        MatchModel match = userService.createUserMatch(userId,createUserMatchDto.getMatchDificulty());
         MatchDto matchDto = modelMapper.map(match, MatchDto.class);
         return ResponseEntity.ok(matchDto);
     }
 
-    @PutMapping("")
-    public ResponseEntity<UserDto> updateUser(UserDto dto) {
+    @PostMapping("/{userId}/matches/{matchId}")
+    public ResponseEntity<RoundMatchDto> playUserMatch(@PathVariable Long userId, @PathVariable Long matchId, @RequestBody PlayUserMatchDo playUserMatchDo) {
 
-        return null;
+
+        RoundMatch roundMatch = userService.playUserMatch(userId,matchId,playUserMatchDo.getNumber());
+        MatchDto matchDto = modelMapper.map(roundMatch.getMatch(), MatchDto.class);
+        RoundMatchDto roundMatchDto = modelMapper.map(roundMatch, RoundMatchDto.class);
+        roundMatchDto.setMatchDto(matchDto);
+        return ResponseEntity.ok(roundMatchDto);
     }
 
-    @DeleteMapping("")
-    public ResponseEntity<UserDto> deleteUser(UserDto dto) {
 
-        return null;
-    }
+
+
 }

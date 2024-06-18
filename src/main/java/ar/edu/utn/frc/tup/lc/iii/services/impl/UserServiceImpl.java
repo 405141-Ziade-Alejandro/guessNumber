@@ -3,10 +3,7 @@ package ar.edu.utn.frc.tup.lc.iii.services.impl;
 import ar.edu.utn.frc.tup.lc.iii.dtos.MatchDto;
 import ar.edu.utn.frc.tup.lc.iii.entities.MatchEntity;
 import ar.edu.utn.frc.tup.lc.iii.entities.UserEntity;
-import ar.edu.utn.frc.tup.lc.iii.models.MatchDificulty;
-import ar.edu.utn.frc.tup.lc.iii.models.MatchModel;
-import ar.edu.utn.frc.tup.lc.iii.models.MatchStatus;
-import ar.edu.utn.frc.tup.lc.iii.models.UserModel;
+import ar.edu.utn.frc.tup.lc.iii.models.*;
 import ar.edu.utn.frc.tup.lc.iii.repositories.UserRepository;
 import ar.edu.utn.frc.tup.lc.iii.services.MatchService;
 import ar.edu.utn.frc.tup.lc.iii.services.UserService;
@@ -68,6 +65,17 @@ public class UserServiceImpl implements UserService {
             UserModel user = modelMapper.map(userOptional.get(), UserModel.class);
             return matchService.createMatch(user,dificulty);
         }
+    }
+
+    @Override
+    public RoundMatch playUserMatch(Long userId, Long matchId, Integer number) {
+        MatchModel matchModel = matchService.getMatchById(matchId);
+        if (matchModel.getUser().getId().equals(userId)) {
+            return matchService.playMatch(matchModel,number);
+        } else {
+            return null;
+        }
+
     }
 
     @Override

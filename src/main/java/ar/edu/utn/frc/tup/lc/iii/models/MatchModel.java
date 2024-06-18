@@ -15,9 +15,9 @@ public class MatchModel {
 
     private MatchDificulty dificulty;
 
-    private int numberToGuess;
+    private Integer numberToGuess;
 
-    private int remainingTries;
+    private Integer remainingTries;
 
     private MatchStatus status;
 }
